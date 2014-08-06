@@ -1,0 +1,7 @@
+{
+    "name": "cc98-reply-count",
+    "version": "0.0.1",
+    "dependencies":{
+        "cc98-node-api": "0.1.6"
+    }
+}
