@@ -44,14 +44,80 @@ var countPerPage = function (options, callback) {
             }
 
             for (var each in posts) {
-                countEachPostsInPage (posts[each], startDate, endDate);
+                if (posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖") {
+                    var postOptions = {
+                        cc98 : cc98,
+                        boardID : boardID,
+                        postID : posts[each].postId,
+                        pageNum : Math.ceil((parseInt(posts[each].replyNum) + 1)/10),
+                        startDate : startDate,
+                        endDate : endDate
+                    }
+
+                    countPerPost(postOptions, null);
+                }
             }
-            options.pageNum = pageNum + 1;
-            checkPageBeforeStartDate(options, callback);
+
+            options.pageNum ++;
+            countPerPage(options, callback);
         }
     });
-}
+};
 
+var countPerPost = function (options, callback) {
+    var cc98 = options.cc98;
+    var postID = options.postID;
+    var boardID = options.boardID;
+    var pageNum = options.pageNum;
+    var startDate = options.startDate;
+    var endDate = options.endDate;
+
+    //all pages are counted.
+    if (pageNum < 1){
+        return;
+    }
+
+    cc98.getPostInfo(boardID, postID, pageNum, pageNum, function (data) {
+        if (data !=null) {
+            var replies = data[1].list;
+
+            //End Condition. All replies in the page are out of date.
+            var firstIndex = checkRepliesBeforeStartDate(replies, startDate);
+            if (firstIndex < 0) {
+                console.log ("Ignore Counting. Page " + pageNum + "Post " + postID);
+                return;
+            }
+
+            for (var each in replies) {
+                var reply = replies[each];
+
+                console.log (reply);
+            }
+
+            options.pageNum --;
+            countPerPost(options, callback);
+        }
+    });
+};
+
+var checkReplyInRange = function (reply, startDate, endDate) {
+
+};
+
+//return the index of the first reply whose post time is after startDate.
+//so use cycle instead of for .. in
+// if no one fulfill, return -1
+var checkRepliesBeforeStartDate = function (replies, startDate) {
+    for (var i = 0; i < replies.length; i++){
+        var reply = replies[i];
+        if (new Date(reply.postTime) > startDate) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+//return true iff all the posts' lastReply time is before startDate.
 var checkPageBeforeStartDate = function (posts, startDate) {
     for (var each in posts) {
         var post = posts[each];
@@ -60,6 +126,6 @@ var checkPageBeforeStartDate = function (posts, startDate) {
         }
     }
     return true;
-}
+};
 
 startCount(_account, new Date("08/07/2014"), new Date());
