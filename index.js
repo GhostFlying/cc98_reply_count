@@ -47,7 +47,8 @@ var countPerPage = function (options, callback) {
             }
 
             for (var each in posts) {
-                if (posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖") {
+                if ((posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖")
+                    && (new Date(posts[each].lastReply) > startDate)) {
                     var postOptions = {
                         cc98 : cc98,
                         boardID : boardID,
