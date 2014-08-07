@@ -25,4 +25,10 @@ countStorage.prototype.addCount = function (username) {
     }
 };
 
+countStorage.prototype.print = function () {
+    for (var each in this.storage) {
+        console.log (each + " : " + this.storage[each].count);
+    }
+}
+
 module.exports = countStorage;
