@@ -3,6 +3,9 @@
  */
 var _98 = require("cc98-node-api");
 var _account = require("./user_config");//read user info from another config file.
+var _result = require("./countResult");
+
+var result = new _result();
 
 var BOARD_ID = 357;//The specified board id, default is "时事新闻"
 
@@ -91,7 +94,9 @@ var countPerPost = function (options, callback) {
             for (var each in replies) {
                 var reply = replies[each];
 
-                console.log (reply);
+                if (each >= firstIndex && checkReplyInRange(reply, startDate, endDate)) {
+                    result.addCount(reply.author);//count this reply.
+                }
             }
 
             options.pageNum --;
@@ -101,7 +106,13 @@ var countPerPost = function (options, callback) {
 };
 
 var checkReplyInRange = function (reply, startDate, endDate) {
-
+    var postTime = new Date(reply.postTime);
+    if (postTime < endDate) {
+        return true;
+    }
+    else {
+        return false;
+    }
 };
 
 //return the index of the first reply whose post time is after startDate.
@@ -128,4 +139,4 @@ var checkPageBeforeStartDate = function (posts, startDate) {
     return true;
 };
 
-startCount(_account, new Date("08/07/2014"), new Date());
+startCount(_account, new Date("08/06/2014"), new Date("08/07/2014"));
