@@ -6,8 +6,9 @@ var _account = require("./user_config");//read user info from another config fil
 var _result = require("./countResult");
 
 var result = new _result();
+var pagesCount = 0; // the count for detect does all counting finished.
 
-var BOARD_ID = 357;//The specified board id, default is "时事新闻"
+var BOARD_ID = 537;//The specified board id, default is "时事新闻"
 
 
 //main function, startDate is the day farthest from now.
@@ -42,12 +43,13 @@ var countPerPage = function (options, callback) {
 
             //End Condition
             if (checkPageBeforeStartDate(posts, startDate)){
-                console.log ("Counting finished.");
+                console.log ("Counting board pages finished. End at page " + pageNum);
                 return;
             }
 
             for (var each in posts) {
-                if ((posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖")
+                if ((posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖"
+                    || posts[each].topicStatus == "热门主题")
                     && (new Date(posts[each].lastReply) > startDate)) {
                     var postOptions = {
                         cc98 : cc98,
@@ -57,7 +59,7 @@ var countPerPage = function (options, callback) {
                         startDate : startDate,
                         endDate : endDate
                     }
-
+                    pagesCount += postOptions.pageNum;
                     countPerPost(postOptions, null);
                 }
             }
@@ -67,6 +69,13 @@ var countPerPage = function (options, callback) {
         }
     });
 };
+
+//if all counting finished, print the result.
+var checkAllCountExit = function () {
+    if (pagesCount == 0) {
+        result.print();
+    }
+}
 
 var countPerPost = function (options, callback) {
     var cc98 = options.cc98;
@@ -88,7 +97,9 @@ var countPerPost = function (options, callback) {
             //End Condition. All replies in the page are out of date.
             var firstIndex = checkRepliesBeforeStartDate(replies, startDate);
             if (firstIndex < 0) {
+                pagesCount -= pageNum;
                 console.log ("Ignore Counting. Page " + pageNum + "Post " + postID);
+                checkAllCountExit();
                 return;
             }
 
@@ -97,11 +108,14 @@ var countPerPost = function (options, callback) {
 
                 if (each >= firstIndex && checkReplyInRange(reply, startDate, endDate)) {
                     result.addCount(reply.author);//count this reply.
+                    //console.log (reply);
                 }
             }
-
+            pagesCount --;
             options.pageNum --;
             countPerPost(options, callback);
+            console.log ("Post: " + postID + "  Counting page" + pageNum + " of replies finished.");
+            checkAllCountExit();
         }
     });
 };
@@ -140,4 +154,4 @@ var checkPageBeforeStartDate = function (posts, startDate) {
     return true;
 };
 
-startCount(_account, new Date("08/06/2014"), new Date("08/07/2014"));
+startCount(_account, new Date("08/08/2014"), new Date());
