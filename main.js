@@ -158,4 +158,55 @@ var checkPageBeforeStartDate = function (posts, startDate) {
     return true;
 };
 
-module.exports = startCount;
+
+//Count replies in one post.
+//Can receive 3 - 5 arguments
+//params : user, postID, boardID[, startDate[, endDate]]
+var countRepliesInOnePost = function () {
+    var argumentsNum = arguments.length;
+    var user;
+    var postID;
+    var boardID;
+    var startDate = new Date("07/08/1995");
+    var endDate = new Date();
+
+    if (argumentsNum < 3 || argumentsNum > 5){
+        throw  new Error("arguments must match user, postID, boardID[, startDate[, endDate]]");
+    }
+
+    user = arguments[0];
+    postID = arguments[1];
+    boardID = arguments[2];
+
+    if (argumentsNum > 3) {
+        startDate = new Date(arguments[3]);
+    }
+    if (arguments == 5) {
+        endDate = new Date(arguments[4]);
+    }
+
+    var cc98 = new _98(user);
+    cc98.login(function (date) {
+        if (date.status == 1) {
+            cc98.getPostInfo(boardID, postID, 1, 1, function(date) {
+                if (date != null) {
+                    var options = {
+                        cc98 : cc98,
+                        postID : postID,
+                        boardID : boardID,
+                        pageNum : Math.ceil(date[0].totalPosts / 10),
+                        startDate : startDate,
+                        endDate : endDate
+                    }
+                    pagesCount += options.pageNum;
+                    countPerPost(options, null);
+                }
+            });
+        }
+    });
+}
+
+module.exports = {
+    CountAllReplies : startCount,
+    CountOnePost : countRepliesInOnePost
+};
