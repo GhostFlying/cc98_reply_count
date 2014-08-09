@@ -1,13 +1,18 @@
 cc98_reply_count
 ================
 
-简单的回复统计程序，基于node.js和DemoHn的[cc98-node-api]（https://github.com/DemoHn/cc98-node-api）
+简单的回复统计程序，基于node.js和DemoHn的 cc98-node-api（https://github.com/DemoHn/cc98-node-api）
 
 开发出于自用目的且进度较慢。
 
 本程序需要大量请求论坛数据，请尽量避免在访问人数较多时使用，且请保证持续稳定的ZJU内网连接，同时在回帖数量较多的板块使用时请谨慎选择统计周期。
 
-作者不为任何因为使用本程序带来的 警告/tp/封禁 负责。
+作者不为任何因为使用本程序带来的 警告/tp/封禁 负责。  
+
+WARNING:  
+
+出于不遗漏挖坟类帖子的情况，任何周期的统计都会从第一页开始遍历，请尽量避免统计过于久远的周期。  
+
 
 ***
 
