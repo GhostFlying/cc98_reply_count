@@ -21,7 +21,7 @@ startDate and endDate should can be parsed by js.
 
 
 Sample:
-main.CountAllReplies (user, 537,"08/07/2014", null);
+main.CountAllReplies (user, 537,"08/07/2014");
 main.CountAllReplies (user, 537,"08/07/2014", "08/08/2014");
 
 main.CountOnePost(user, 537, 4411757);

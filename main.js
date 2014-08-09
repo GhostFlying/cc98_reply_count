@@ -21,7 +21,7 @@ var startCount = function () {
     var boardID = arguments[1];
     var startDate = new Date(arguments[2]);
     var endDate = new Date();
-    if (argumentsNum == 5){
+    if (argumentsNum == 4){
         endDate = new Date(arguments[3]);
     }
 
@@ -168,7 +168,7 @@ var checkPageBeforeStartDate = function (posts, startDate) {
 
 //Count replies in one post.
 //Can receive 3 - 5 arguments
-//params : user, postID, boardID[, startDate[, endDate]]
+//params : user, boardID, postID,[, startDate[, endDate]]
 var countRepliesInOnePost = function () {
     var argumentsNum = arguments.length;
     var user;
@@ -182,8 +182,8 @@ var countRepliesInOnePost = function () {
     }
 
     user = arguments[0];
-    postID = arguments[1];
-    boardID = arguments[2];
+    boardID = arguments[1];
+    postID = arguments[2];
 
     if (argumentsNum > 3) {
         startDate = new Date(arguments[3]);
