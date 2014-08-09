@@ -11,8 +11,9 @@ var user = {
 
 /*
 Count all the replies in one board:
-main.CountAllReplies(user, boardID, startDate[, endDate]);
+main.CountAllReplies(user, excludes, boardID, startDate[, endDate]);
 date should be enter by the format javaScript can parse.
+excludes should be postID spited by ",", and this param must be offered even if it's not needed.
 
 
 Count all the replies in one post:
@@ -21,8 +22,8 @@ startDate and endDate should can be parsed by js.
 
 
 Sample:
-main.CountAllReplies (user, 537,"08/07/2014");
-main.CountAllReplies (user, 537,"08/07/2014", "08/08/2014");
+main.CountAllReplies (user, "4292277, 4411789", 537,"08/07/2014");
+main.CountAllReplies (user, "", 537,"08/07/2014", "08/08/2014");
 
 main.CountOnePost(user, 537, 4411757);
 main.CountOnePost(user, 537, 4411757, "08/08/2014");

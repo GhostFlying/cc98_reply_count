@@ -13,16 +13,20 @@ var pagesCount = 0; // the count for detect does all counting finished.
 var startCount = function () {
     var argumentsNum = arguments.length;
 
-    if (argumentsNum < 3 || argumentsNum >45) {
-        throw  new Error("arguments must match user, boardID, startDate[, endDate]");
+    if (argumentsNum < 4 || argumentsNum > 5) {
+        throw  new Error("arguments must match user, excludes, boardID, startDate[, endDate]");
     }
 
     var cc98 = new _98(arguments[0]);
     var boardID = arguments[1];
-    var startDate = new Date(arguments[2]);
+    var excludes = arguments[2].split(",");
+    for (var each in excludes) {
+        excludes[each] = excludes[each].trim();
+    }
+    var startDate = new Date(arguments[3]);
     var endDate = new Date();
-    if (argumentsNum == 4){
-        endDate = new Date(arguments[3]);
+    if (argumentsNum == 5){
+        endDate = new Date(arguments[4]);
     }
 
     cc98.login(function(data){
@@ -31,6 +35,7 @@ var startCount = function () {
                 cc98: cc98,
                 pageNum: 1,
                 boardID: boardID,
+                excludes: excludes,
                 startDate: startDate,
                 endDate: endDate
             }
@@ -44,6 +49,7 @@ var countPerPage = function (options, callback) {
     var cc98 = options.cc98;
     var pageNum = options.pageNum;
     var boardID = options.boardID;
+    var excludes = options.excludes;
     var startDate = options.startDate;
     var endDate = options.endDate;
 
@@ -60,8 +66,9 @@ var countPerPage = function (options, callback) {
 
             for (var each in posts) {
                 if ((posts[each].topicStatus == "开放主题" || posts[each].topicStatus == "保存帖"
-                    || posts[each].topicStatus == "热门主题")
-                    && (new Date(posts[each].lastReply) > startDate)) {
+                    || posts[each].topicStatus == "热门主题")//ignore all the closed post and top post.
+                    && (new Date(posts[each].lastReply) > startDate)
+                    && (excludes.indexOf(posts[each].postId) < 0)) {
                     var postOptions = {
                         cc98 : cc98,
                         boardID : boardID,
@@ -109,7 +116,7 @@ var countPerPost = function (options, callback) {
             var firstIndex = checkRepliesBeforeStartDate(replies, startDate);
             if (firstIndex < 0) {
                 pagesCount -= pageNum;
-                console.log ("Ignore Counting. Page " + pageNum + "Post " + postID);
+                console.log ("Ignore Counting. Page " + pageNum + "  Post " + postID);
                 checkAllCountExit();
                 return;
             }
