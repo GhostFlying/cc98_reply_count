@@ -9,7 +9,22 @@ var user = {
     password : "passwprd"
 }
 
-//main(user, boardID, startDate, endDate);
-//date should be enter by the format javaScript can parse.
-// endDate can be null. then it's now.
-main (user, 537,"08/08/2014", null);
+/*
+Count all the replies in one board:
+main.CountAllReplies(user, boardID, startDate, endDate);
+date should be enter by the format javaScript can parse.
+endDate can be null. then it's now.
+
+Count all the replies in one post:
+main.CountOnePost(user, postID, boardID[, startDate[, endDate]]);
+startDate and endDate should can be parsed by js.
+
+
+Sample:
+main.CountAllReplies (user, 537,"08/07/2014", null);
+main.CountAllReplies (user, 537,"08/07/2014", "08/08/2014");
+
+main.CountOnePost(user, 537, 4411757);
+main.CountOnePost(user, 537, 4411757, "08/08/2014");
+main.CountOnePost(user, 537, 4411757, "08/08/2014", "08/09/2014");
+*/
