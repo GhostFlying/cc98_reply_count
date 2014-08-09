@@ -11,9 +11,9 @@ var user = {
 
 /*
 Count all the replies in one board:
-main.CountAllReplies(user, boardID, startDate, endDate);
+main.CountAllReplies(user, boardID, startDate[, endDate]);
 date should be enter by the format javaScript can parse.
-endDate can be null. then it's now.
+
 
 Count all the replies in one post:
 main.CountOnePost(user, postID, boardID[, startDate[, endDate]]);

@@ -10,12 +10,19 @@ var pagesCount = 0; // the count for detect does all counting finished.
 
 
 //main function, startDate is the day farthest from now.
-var startCount = function (account,boardID, startDateStr, endDateStr) {
-    var cc98 = new _98(account);
-    var startDate = new Date(startDateStr);
+var startCount = function () {
+    var argumentsNum = arguments.length;
+
+    if (argumentsNum < 3 || argumentsNum >45) {
+        throw  new Error("arguments must match user, boardID, startDate[, endDate]");
+    }
+
+    var cc98 = new _98(arguments[0]);
+    var boardID = arguments[1];
+    var startDate = new Date(arguments[2]);
     var endDate = new Date();
-    if (endDateStr != null){
-        endDate = new Date(endDateStr);
+    if (argumentsNum == 5){
+        endDate = new Date(arguments[3]);
     }
 
     cc98.login(function(data){
