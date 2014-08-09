@@ -1,6 +1,13 @@
 {
     "name": "cc98-reply-count",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "repository":{
+        "type": "git",
+        "url": "https://github.com/GhostFlying/cc98_reply_count"
+    },
+    "author":{
+        "name":"GhostFlying"
+    },
     "dependencies":{
         "cc98-node-api": "0.1.6"
     }
